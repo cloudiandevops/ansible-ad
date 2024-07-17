@@ -1,5 +1,4 @@
 ---
----
 - name: Import Active Directory PowerShell Module
   win_powershell:
     script: |
