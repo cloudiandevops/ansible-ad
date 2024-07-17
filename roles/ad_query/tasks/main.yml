@@ -1,0 +1,41 @@
+---
+---
+- name: Import Active Directory PowerShell Module
+  win_powershell:
+    script: |
+      Import-Module ActiveDirectory
+
+- name: Query AD for Hostnames
+  win_powershell:
+    script: |
+      Get-ADComputer -Filter * | Select-Object -Property Name
+  register: ad_hostnames
+
+- name: Query AD for Users
+  win_powershell:
+    script: |
+      Get-ADUser -Filter * | Select-Object -Property SamAccountName, Name
+  register: ad_users
+
+- name: Query AD for Groups
+  win_powershell:
+    script: |
+      Get-ADGroup -Filter * | Select-Object -Property SamAccountName, Name
+  register: ad_groups
+
+- name: Combine results for template
+  set_fact:
+    ad_results:
+      ad_hostnames: "{{ ad_hostnames.stdout | from_json }}"
+      ad_users: "{{ ad_users.stdout | from_json }}"
+      ad_groups: "{{ ad_groups.stdout | from_json }}"
+
+- name: Generate AD results file from template
+  template:
+    src: ad_results.j2
+    dest: /path/to/ad_results.txt  # Specify the destination path
+  vars:
+    ad_hostnames: "{{ ad_results.ad_hostnames }}"
+    ad_users: "{{ ad_results.ad_users }}"
+    ad_groups: "{{ ad_results.ad_groups }}"
+

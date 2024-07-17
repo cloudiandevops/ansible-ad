@@ -1,0 +1,17 @@
+# Active Directory Query Results
+
+## Hostnames:
+{% for hostname in ad_hostnames %}
+- {{ hostname.Name }}
+{% endfor %}
+
+## Users:
+{% for user in ad_users %}
+- Username: {{ user.SamAccountName }}, Name: {{ user.Name }}
+{% endfor %}
+
+## Groups:
+{% for group in ad_groups %}
+- Group Name: {{ group.SamAccountName }}, Name: {{ group.Name }}
+{% endfor %}
+

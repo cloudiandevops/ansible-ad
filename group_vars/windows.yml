@@ -1,0 +1,5 @@
+# group_vars/windows.yml
+ad_server: "your_ad_server.example.com"
+ad_user: "your_ad_admin_user"
+ad_password: "your_ad_password"
+
